@@ -17,4 +17,6 @@
 -(void)startRunning;
 -(void)stopRunning;
 
+-(void)defaultConfigure;
+
 @end

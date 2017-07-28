@@ -13,7 +13,6 @@
 {
     WatchView* watch;
 }
-@property (weak, nonatomic) IBOutlet UIView *watchBg;
 
 @end
 
@@ -23,9 +22,9 @@
     [super viewDidLoad];
     self.view.backgroundColor=[UIColor blackColor];
     
-    watch=[WatchView defaultWatchWithSize:self.watchBg.frame.size];
-    watch.frame=self.watchBg.bounds;
-    [self.watchBg addSubview:watch];
+    watch=[WatchView defaultWatchWithSize:CGSizeMake(200, 200)];
+    
+    [self.view addSubview:watch];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -36,6 +35,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    watch.center=self.view.center;
     [watch startRunning];
 }
 
