@@ -17,12 +17,15 @@
     UIView* secoBg;
     UIView* dotBg;
     
-    
     NSArray* weekStr;
     UILabel* dayLab;
     UILabel* weeLab;
     
     NSTimer* timer;
+    
+    UIColor* plateColor;
+    UIColor* scaleColor;
+    UIColor* pointerColor;
 }
 
 +(instancetype)defaultWatch
@@ -41,9 +44,11 @@
 
 -(void)defaultConfigure
 {
+    [self configureColors];
     [self configurePlate];
+    [self configureBrand];
     [self configureScales];
-    [self configureCalendar];
+//    [self configureCalendar];
     [self configurePointers];
     self.layer.shouldRasterize=YES;
     self.layer.rasterizationScale = [[UIScreen mainScreen] scale];
@@ -58,13 +63,25 @@
     [timer setFireDate:[NSDate distantFuture]];
 }
 
+-(void)configureColors
+{
+    plateColor=[UIColor colorWithRed:211/255.0 green:211/255.0 blue:197/255.0 alpha:1];
+    scaleColor=[UIColor colorWithRed:55/255.0 green:52/255.0 blue:49/255.0 alpha:1];
+    pointerColor=[UIColor colorWithRed:55/255.0 green:52/255.0 blue:49/255.0 alpha:1];
+}
+
 -(void)configurePlate
 {
     plateBg=[[UIView alloc]initWithFrame:self.bounds];
     plateBg.layer.cornerRadius=plateBg.frame.size.height/2;
-    plateBg.backgroundColor=[UIColor colorWithRed:0.1 green:0.3 blue:0.8 alpha:1];
+    plateBg.backgroundColor=plateColor;
     
     [self addSubview:plateBg];
+}
+
+-(void)dealloc
+{
+    [timer invalidate];
 }
 
 -(void)configureScales
@@ -74,13 +91,13 @@
     CGFloat h=watchBG.frame.size.height;
     
     CGPoint center=CGPointMake(w/2, h/2);
-    CGSize sizeHour=CGSizeMake(2, 20);
-//    CGSize sizeMinu=CGSizeMake(0.5, 6);
+    CGSize sizeHour=CGSizeMake(2, 16);
+    CGSize sizeMinu=CGSizeMake(0.5, 9);
     
-    UIColor* color=[UIColor greenColor];
+    UIColor* color=scaleColor;
     
     CGFloat rh=h/2-sizeHour.height/2-4;
-//    CGFloat rm=h/2-sizeMinu.height/2-4;
+    CGFloat rm=h/2-sizeMinu.height/2-4;
     
     for (int i=0; i<12; i++) {
         CGFloat rotation=i/12.0*M_PI*2;
@@ -88,19 +105,50 @@
         CGFloat cy=center.y-rh*cos(rotation);
         CGPoint scent=CGPointMake(cx, cy);
         
-        UIView* scale=[self createScaleCenter:scent size:sizeHour color:color rotation:rotation title:@""];
+        NSString* num=[NSString stringWithFormat:@"%d",(int)i];
+        if (i==0) {
+            num=@"12";
+        }
+        
+        UIView* scale=[self createScaleCenter:scent size:sizeHour color:color rotation:rotation title:num];
         [watchBG addSubview:scale];
     }
     
-//    for (int i=0; i<60; i++) {
-//        CGFloat rotation=i/60.0*M_PI*2;
-//        CGFloat cx=center.x+rm*sin(rotation);
-//        CGFloat cy=center.y-rm*cos(rotation);
-//        CGPoint scent=CGPointMake(cx, cy);
-//        
-//        UIView* scale=[self createScaleCenter:scent size:sizeMinu color:color rotation:rotation title:@""];
-//        [watchBG addSubview:scale];
-//    }
+    for (int i=0; i<60; i++) {
+        CGFloat rotation=i/60.0*M_PI*2;
+        CGFloat cx=center.x+rm*sin(rotation);
+        CGFloat cy=center.y-rm*cos(rotation);
+        CGPoint scent=CGPointMake(cx, cy);
+        
+        UIView* scale=[self createScaleCenter:scent size:sizeMinu color:color rotation:rotation title:@""];
+        [watchBG addSubview:scale];
+    }
+}
+
+-(void)configureBrand
+{
+    UIView * watchBG=self;
+    CGFloat w=watchBG.frame.size.width;
+    CGFloat h=watchBG.frame.size.height/2;
+    
+    CGFloat ttw=60;
+    CGFloat tth=11;
+    
+    CGFloat offy=7;
+    
+    UILabel* title=[[UILabel alloc]initWithFrame:CGRectMake(w/2-ttw/2, h/2-tth+offy, ttw, tth)];
+    title.text=@"SEIKO";
+    title.textAlignment=NSTextAlignmentCenter;
+    title.textColor=scaleColor;
+    title.font=[UIFont systemFontOfSize:11];
+    [self addSubview:title];
+    
+    UILabel* detail=[[UILabel alloc]initWithFrame:CGRectMake(w/2-ttw/2, h/2+offy, ttw, tth)];
+    detail.text=@"QUARTZ";
+    detail.textAlignment=NSTextAlignmentCenter;
+    detail.textColor=scaleColor;
+    detail.font=[UIFont systemFontOfSize:8];
+    [self addSubview:detail];
 }
 
 -(void)configureCalendar
@@ -144,18 +192,20 @@
     
     CGPoint center=CGPointMake(w/2, h/2);
     
-    hourBg=[self createPointerCenter:center size:CGSizeMake(5, h*0.5) color:[UIColor whiteColor]];
+    CGFloat h_2=h/2;
+    
+    hourBg=[self createPointerCenter:center size:CGSizeMake(8, h_2*0.6) color:pointerColor tailSize:CGSizeZero];
     [watchBG addSubview:hourBg];
     
-    minuBg=[self createPointerCenter:center size:CGSizeMake(5, h*0.7) color:[UIColor whiteColor]];
+    minuBg=[self createPointerCenter:center size:CGSizeMake(3, h_2*0.83) color:pointerColor tailSize:CGSizeZero];
     [watchBG addSubview:minuBg];
     
-    secoBg=[self createPointerCenter:center size:CGSizeMake(1, h*0.8) color:[UIColor greenColor]];
+    secoBg=[self createPointerCenter:center size:CGSizeMake(1, h_2*0.7) color:pointerColor tailSize:CGSizeMake(2, h_2*0.3)];
     [watchBG addSubview:secoBg];
     
     dotBg=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 1, 1)];
     dotBg.center=center;
-    dotBg.backgroundColor=[UIColor lightGrayColor];
+    dotBg.backgroundColor=[UIColor blackColor];
     [watchBG addSubview:dotBg];
     
     timer=[NSTimer scheduledTimerWithTimeInterval:0.02 target:self selector:@selector(watchRunning) userInfo:nil repeats:YES];
@@ -164,46 +214,46 @@
 
 -(UIView*)createScaleCenter:(CGPoint)center size:(CGSize)size color:(UIColor*)color rotation:(CGFloat)rotation title:(NSString*)title
 {
-    UILabel* sc=[[UILabel alloc]initWithFrame:CGRectMake(0, 0, size.width, size.height)];
+    UIView* sc=[[UILabel alloc]initWithFrame:CGRectMake(0, 0, size.width, size.height)];
     
-//    if (title.length>0) {
-//        sc.text=title;
-//        sc.textColor=color;
-//        sc.textAlignment=NSTextAlignmentCenter;
-//        sc.font=[UIFont systemFontOfSize:14];
-//        sc.frame=CGRectMake(0, 0, 30, 30);
-//    }
-//    else
-//    {
-        sc.backgroundColor=color;
-        sc.transform=CGAffineTransformMakeRotation(rotation);
-//    }
-    
+    sc.backgroundColor=color;
+    sc.transform=CGAffineTransformMakeRotation(rotation);
     sc.center=center;
+
+    if (title.length>0) {
+        UILabel* lab=[[UILabel alloc]initWithFrame:CGRectMake(0, size.height, 30, 20)];
+        lab.center=CGPointMake(size.width/2, lab.center.y);
+        lab.textColor=color;
+        lab.text=title;
+        lab.textAlignment=NSTextAlignmentCenter;
+        lab.font=[UIFont boldSystemFontOfSize:16];
+        [sc addSubview:lab];
+        
+        lab.transform=CGAffineTransformMakeRotation(-rotation);
+    }
     
     return sc;
 }
 
--(UIView*)createPointerCenter:(CGPoint)center size:(CGSize)size color:(UIColor*)color
+-(UIView*)createPointerCenter:(CGPoint)center size:(CGSize)size color:(UIColor*)color tailSize:(CGSize)tailSize
 {
-    UIView* bg=[[UIView alloc]initWithFrame:CGRectMake(0, 0, size.width, size.height)];
-    
+    UIView* bg=[[UIView alloc]initWithFrame:CGRectMake(0, 0, size.width, size.height*2)];
     bg.layer.shouldRasterize=YES;
     bg.layer.rasterizationScale = [[UIScreen mainScreen] scale];
     bg.center=center;
     
-    
-    
-    UIView* pointer=[[UIView alloc]initWithFrame:CGRectMake(0, 0, bg.frame.size.width, bg.frame.size.height*0.6)];
+    UIView* pointer=[[UIView alloc]initWithFrame:CGRectMake(0, 0, size.width, size.height)];
     pointer.backgroundColor=color;
-    if (size.width>1) {
-        pointer.layer.borderColor=[UIColor grayColor].CGColor;
-        pointer.layer.borderWidth=0.5;
-    }
+    pointer.layer.cornerRadius=size.width/2;
     [bg addSubview:pointer];
     
-    UIView* rou=[[UIView alloc]initWithFrame:CGRectMake(0, 0, size.width+4, size.width+4)];
-    rou.center=CGPointMake(size.width/2, size.height/2);
+    UIView* tail=[[UIView alloc]initWithFrame:CGRectMake(size.width*0.5-tailSize.width*0.5, size.height, tailSize.width, tailSize.height)];
+    tail.backgroundColor=color;
+    tail.layer.cornerRadius=tailSize.width/2;
+    [bg addSubview:tail];
+    
+    UIView* rou=[[UIView alloc]initWithFrame:CGRectMake(0, 0, size.width+5, size.width+5)];
+    rou.center=CGPointMake(size.width/2, size.height);
     rou.backgroundColor=color;
     rou.layer.cornerRadius=rou.frame.size.width/2;
     [bg addSubview:rou];
