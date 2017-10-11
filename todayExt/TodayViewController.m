@@ -23,10 +23,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    if ([[[UIDevice currentDevice]systemVersion]floatValue]>=10) {
+        self.extensionContext.widgetLargestAvailableDisplayMode=NCWidgetDisplayModeExpanded;
+    }
+    
     watch=[WatchView defaultWatchWithSize:self.watchBg.frame.size];
     watch.frame=self.watchBg.bounds;
     [self.watchBg addSubview:watch];
     // Do any additional setup after loading the view from its nib.
+}
+
+-(void)widgetActiveDisplayModeDidChange:(NCWidgetDisplayMode)activeDisplayMode withMaximumSize:(CGSize)maxSize
+{
+    if (activeDisplayMode == 0) {
+        self.preferredContentSize = CGSizeMake([UIScreen mainScreen].bounds.size.width, 110);
+    } else {
+        self.preferredContentSize = CGSizeMake([UIScreen mainScreen].bounds.size.width, 240);
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated

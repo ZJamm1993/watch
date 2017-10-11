@@ -199,9 +199,11 @@
 				TargetAttributes = {
 					39C240641F2ACF6D00BA29DD = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 9J7GGU5G9G;
 					};
 					39C240821F2ACFB100BA29DD = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 9J7GGU5G9G;
 					};
 				};
 			};
@@ -388,6 +390,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 9J7GGU5G9G;
 				INFOPLIST_FILE = Watch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -400,6 +403,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 9J7GGU5G9G;
 				INFOPLIST_FILE = Watch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -411,6 +415,7 @@
 		39C240931F2ACFB200BA29DD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 9J7GGU5G9G;
 				INFOPLIST_FILE = todayExt/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
@@ -423,6 +428,7 @@
 		39C240941F2ACFB200BA29DD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 9J7GGU5G9G;
 				INFOPLIST_FILE = todayExt/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
@@ -451,6 +457,7 @@
 				39C2407E1F2ACF6D00BA29DD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		39C240921F2ACFB200BA29DD /* Build configuration list for PBXNativeTarget "todayExt" */ = {
 			isa = XCConfigurationList;
@@ -459,6 +466,7 @@
 				39C240941F2ACFB200BA29DD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
